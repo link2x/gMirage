@@ -88,12 +88,6 @@
     <scripts name="Wrappers">
       <script>scripts\aboutThisFolder.gml</script>
     </scripts>
-    <scripts name="ORIGINAL CODE">
-      <script>scripts\modGeneral.gml</script>
-      <script>scripts\modFont.gml</script>
-      <script>scripts\modClientTCP.gml</script>
-      <script>scripts\modDatabase.gml</script>
-    </scripts>
     <scripts name="modGeneral">
       <script>scripts\sleep.gml</script>
       <script>scripts\getTickCount.gml</script>
@@ -111,7 +105,7 @@
       <script>scripts\isLoginLegal.gml</script>
       <script>scripts\isStringLegal.gml</script>
     </scripts>
-    <scripts name="modFont">
+    <scripts name="modText">
       <script>scripts\createFont.gml</script>
       <script>scripts\setBkMode.gml</script>
       <script>scripts\textOut.gml</script>

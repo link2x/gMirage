@@ -1,5 +1,4 @@
-// From modFont
-
+// From modText
     
         for (x=0;x<MAX_MAPX;x+=1) {
             for (y=0;y<MAX_MAPY;y+=1) {

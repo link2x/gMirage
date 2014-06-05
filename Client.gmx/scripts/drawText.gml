@@ -1,4 +1,4 @@
-// From modFont
+// From modText
 //
 // Draw text onto buffer
 //
