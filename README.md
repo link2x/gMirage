@@ -13,17 +13,17 @@ and other differences between the two languages), but the core of the system sho
 
 The engine will be released under the LGPL, allowing it to be used either in proprietary or open-source software.
 
-Hopefully this will breathe new life into the engine, letting the large audiance Game Maker has have easier access to
+Hopefully this will breathe new life into the engine, letting the large audience Game Maker has have easier access to
 a full, modifiable system for producing ORPG games.
 
 
-Setup
+Setup / Extra Steps
 ======
 
-After opening the project inside of Game Maker: Studio, the folder name may be changed by Game Maker.
-You will have to redirect your GitHub client to this folder.
+The code being converted is included in the `Original Source` folder, but this disregards many files and settings.
+Therefore, you may want to download the original source from [Key2Heaven](http://www.key2heaven.com/ms/forums/viewtopic.php?f=216&t=9847).
+Visual Basic 6 is required for this.
 
-Additionally, it is recommended that you download the original source from [Key2Heaven](http://www.key2heaven.com/ms/forums/viewtopic.php?f=216&t=9847).
-Visual Basic 6 is required to view the source, however.
+Additionally, this project will not be including any of the original graphics, sound, or music of the original source.
 
 It is also suggested to register at the Key2Heaven Forums and keep up with the [gMirage forum post](http://www.key2heaven.com/ms/forums/viewtopic.php?f=217&t=13599).
