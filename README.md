@@ -17,3 +17,8 @@ Setup
 
 After opening the project inside of Game Maker: Studio, the folder name may be changed by Game Maker.
 You will have to redirect your GitHub client to this folder.
+
+Additionally, it is recommended that you download the original source from [Key2Heaven](http://www.key2heaven.com/ms/forums/viewtopic.php?f=216&t=9847).
+Visual Basic 6 is required to view the source, however.
+
+It is also suggested to register at the Key2Heaven Forums and keep up with the [gMirage forum post](http://www.key2heaven.com/ms/forums/viewtopic.php?f=217&t=13599).
