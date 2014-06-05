@@ -2,6 +2,11 @@ gMirage
 =======
 A port of Mirage Source 4 from Visual Basic 6 to Game Maker: Studio.
 
+What is Mirage Source?
+=======
+Mirage Source is a free engine for top-down ORPG games. It is originally distributed as a server and client in Visual Basic 6 source code.
+One of the more popular games created from this engine is [Secrets of Mirage X](http://www.secretsofmirage.com/), which runs to this day.
+
 =======
 The plan is to port MS4 over as faithfully as possible. Some major changes will be necessary (packet structure, UI handling,
 and other differences between the two languages), but the core of the system should be largely unchanged.
