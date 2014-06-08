@@ -8,9 +8,19 @@
   <sprites name="sprites"/>
   <backgrounds name="background"/>
   <paths name="paths"/>
+  <scripts name="scripts">
+    <scripts name="UI_Handling">
+      <script>scripts\ui_create_window.gml</script>
+      <script>scripts\script1.gml</script>
+    </scripts>
+  </scripts>
   <objects name="objects">
-    <object>objects\object0</object>
+    <object>objects\obj_UIController</object>
+    <object>objects\obj_UIWindow</object>
   </objects>
+  <rooms name="rooms">
+    <room>rooms\room0</room>
+  </rooms>
   <help>
     <rtf>help.rtf</rtf>
   </help>
