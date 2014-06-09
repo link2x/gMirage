@@ -35,9 +35,9 @@ windowCount = 0;
 
 // THEMING - These are accessed by windows to theme them.
 borderColor      = c_black;  // Window Border Color
-borderColorSel   = c_ltgray; // Window Border Color (When mouse is in bounds)
-windowColor1     = c_ltgray; // Upper Fade Color
-windowColor2     = c_white;  // Lower Fade Color
+borderColorSel   = c_gray; // Window Border Color (When mouse is in bounds)
+windowColor1     = c_navy; // Upper Fade Color
+windowColor2     = c_ltgray;  // Lower Fade Color
 windowColorInner = c_white;  // Inner Window Color
 titleColor       = c_white;  // Title Color
 titleColorShade  = c_dkgray; // Title Color Shadow
@@ -46,15 +46,33 @@ titleColorShade  = c_dkgray; // Title Color Shadow
 mouseHeld = 0;
 instance_create(0,0,obj_UIMouse);
 
-// For testing purposes, we're going to create a single window for now.
-// We will not pay attention to Z levels.
+// DEBUG Window
+debugWindow = ui_create_window(2,32,512,320,1,2,2,8,16,320,id);
+window[debugWindow].Title   = "UIDebug";
+window[debugWindow].visible = true;
+
+// A test window.
 testWindow = ui_create_window(2,2,320,240,1,2,2,8,16,240,id); // Test window 1
+window[testWindow].Title   = "Test Window 1";
 window[testWindow].visible = true; // For testing purposes, we're going to make it instantly visible.
 
-testWindow2 = ui_create_window(2,32,512,320,1,2,2,8,16,320,id); // Test window 2
+
+// A test window.
+testWindow2 = ui_create_window(32,32,320,240,1,2,2,8,16,240,id); // Test window 2
+window[testWindow2].Title   = "Test Window 2";
 window[testWindow2].visible = true; // For testing purposes, we're going to make it instantly visible.
 
-debugA = 0;
+// A test window.
+testWindow3 = ui_create_window(64,64,320,240,1,2,2,8,16,240,id); // Test window 2
+window[testWindow3].Title   = "Test Window 3";
+window[testWindow3].visible = true; // For testing purposes, we're going to make it instantly visible.
+
+// DEBUG
+if windowCount &gt; 0 {
+    for (i=windowCount;i&gt;0;i-=1) {
+        show_message("Title: "+string(window[i].Title)+" // W-ID ("+string(i)+") // O-ID ("+string(window[i])+") // Vis: "+string(window[i].visible)+" // Z: "+string(window[i].z));
+    };
+};
 </string>
           </argument>
         </arguments>
@@ -108,12 +126,22 @@ if !mouseHeld {
     for (i=1;i&lt;=windowCount;i+=1)  {
         zID = windowZ[i];
         if !zFound {
-            if ((mouse_x&gt;=window[zID].x) and (mouse_x&lt;=(window[zID].x+window[zID].Width))) and ((mouse_y&gt;=window[zID].y) and (mouse_y&lt;=(window[zID].y+window[zID].Height))) {
-                window[zID].mouseInBounds = true;
-                zFound = 1;
+            if !window[zID].blindsMode {
+                if ((mouse_x&gt;=window[zID].x) and (mouse_x&lt;=(window[zID].x+window[zID].Width))) and ((mouse_y&gt;=window[zID].y) and (mouse_y&lt;=(window[zID].y+window[zID].Height))) {
+                    window[zID].mouseInBounds = true;
+                    zFound = 1;
+                } else {
+                    window[zID].mouseInBounds = false;
+                    zFound = 0;
+                };
             } else {
-                window[zID].mouseInBounds = false;
-                zFound = 0;
+                if ((mouse_x&gt;=window[zID].x) and (mouse_x&lt;=(window[zID].x+window[zID].Width))) and ((mouse_y&gt;=window[zID].y) and (mouse_y&lt;=(window[zID].y+(window[zID].tHeight+(window[zID].Padding+1))))) {
+                    window[zID].mouseInBounds = true;
+                    zFound = 1;
+                } else {
+                    window[zID].mouseInBounds = false;
+                    zFound = 0;
+                };
             };
         } else {
             window[zID].mouseInBounds = false;
@@ -172,18 +200,21 @@ for(dWindow=windowCount;dWindow&gt;0;dWindow-=1) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// DEBUG
+            <string>// DEBUG - Now draws to the debug window.
+surface_set_target(window[debugWindow].Surface);
+draw_rectangle(-1,-1, window[debugWindow].Width-(2*((2*window[debugWindow].Border)+window[debugWindow].Padding)),window[debugWindow].iHeight,0);
 
-draw_set_color(c_green);
+draw_set_color(c_black);
 
 draw_text(2,2,"mouseHeld: "+string(mouseHeld));
 draw_text(2,16+2,"Window Count: "+string(windowCount));
 
 if windowCount &gt; 0 {
     for (i=windowCount;i&gt;0;i-=1) {
-        draw_text(10,16+2+(16*i),"Window-ID ("+string(i)+") // Object-ID ("+string(window[i])+") // Visible: "+string(window[i].visible)+" // Z: "+string(window[i].z));
+        draw_text(10,16+2+(16*i),"Title: "+string(window[i].Title)+" // W-ID ("+string(i)+") // O-ID ("+string(window[i])+") // Vis: "+string(window[i].visible)+" // Z: "+string(window[i].z));
     };
 };
+surface_reset_target();
 </string>
           </argument>
         </arguments>

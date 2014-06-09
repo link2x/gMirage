@@ -16,6 +16,9 @@
       <script>scripts\ui_bring_to_front.gml</script>
     </scripts>
   </scripts>
+  <fonts name="fonts">
+    <font>fonts\fnt_UI</font>
+  </fonts>
   <objects name="objects">
     <object>objects\obj_UIController</object>
     <object>objects\obj_UIWindow</object>
