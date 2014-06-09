@@ -27,6 +27,27 @@
             <kind>1</kind>
             <string>// Sets the depth of the window for different Z values.
 depth = -10000 + z;
+
+// Mouse Control
+if mouseInBounds { // If the mouse was detected by UIWindow to be within the usable space.
+    if (mouse_check_button_pressed(mb_left) and !UIController.mouseHeld) {
+        UIController.mouseHeld = 1;
+        ui_bring_to_front(UIController,windowID);
+        if (mouse_y&lt;=(y+tHeight)) {Dragging = 1; mouseXOffset = mouse_x-x; mouseYOffset = mouse_y-y;};
+    } else if ((!mouse_check_button(mb_left)) and (UIController.mouseHeld)) {
+        UIController.mouseHeld = 0;
+        if Dragging {Dragging = 0;};
+    }
+}
+
+if !UIController.mouseHeld {
+Dragging = 0;
+}
+
+if Dragging {
+x = mouse_x-mouseXOffset;
+y = mouse_y-mouseYOffset;
+};
 </string>
           </argument>
         </arguments>
@@ -49,7 +70,38 @@ depth = -10000 + z;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string></string>
+            <string>// Main Window / Window Color
+draw_rectangle_colour(x,y,x+Width,y+Height,UIController.windowColor1,UIController.windowColor1,UIController.windowColor2,UIController.windowColor2,0);
+
+// Borders
+draw_set_colour(UIController.borderColor);
+// Outer Border
+draw_rectangle(x,y,x+Width,y+Height,1); 
+// Inner Border
+draw_rectangle(x+(Padding+1),y+(tHeight)+(Padding+1),x+Width-(Padding+1),y+Height-(Padding+1),1);
+
+// Outer Border Highlight (On Mouse)
+if mouseInBounds {
+draw_set_colour(UIController.borderColorSel);
+draw_rectangle(x,y,x+Width,y+Height,1); 
+};
+
+// Inner Window
+// This draw shouldn't be seen. If it is, something went wrong with the surface.
+draw_set_color(UIController.windowColorInner);
+draw_rectangle(x+(Padding+2),y+(tHeight)+(Padding+2),x+Width-(Padding+2),y+Height-(Padding+2),0);
+
+// DEBUG
+surface_set_target(Surface);
+draw_set_color(UIController.windowColorInner);
+draw_rectangle(-1,-1, Width-(2*((2*Border)+Padding)),iHeight,0);
+draw_set_color(c_black);
+draw_text(2,2,z);
+surface_reset_target();
+
+// Inner Surface
+draw_surface_part(Surface,0,0,Width-((2*Padding)+(3)), Height-((2*Padding)+(3)+(tHeight)),x+(Padding+2),y+(tHeight)+(Padding+2));
+</string>
           </argument>
         </arguments>
       </action>

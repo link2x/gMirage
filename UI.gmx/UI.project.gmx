@@ -5,18 +5,21 @@
   </Configs>
   <NewExtensions/>
   <sounds name="sound"/>
-  <sprites name="sprites"/>
+  <sprites name="sprites">
+    <sprite>sprites\spr_debug</sprite>
+  </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
   <scripts name="scripts">
     <scripts name="UI_Handling">
       <script>scripts\ui_create_window.gml</script>
-      <script>scripts\script1.gml</script>
+      <script>scripts\ui_bring_to_front.gml</script>
     </scripts>
   </scripts>
   <objects name="objects">
     <object>objects\obj_UIController</object>
     <object>objects\obj_UIWindow</object>
+    <object>objects\obj_UIMouse</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\room0</room>
