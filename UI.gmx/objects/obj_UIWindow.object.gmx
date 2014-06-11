@@ -41,7 +41,7 @@ if mouseInBounds { // If the mouse was detected by UIWindow to be within the usa
     
     // Window Blinds - RightClick check.
     if ((mouse_check_button_released(mb_right)) and ((mouse_y&lt;=(y+tHeight+1)) and (mouse_y&gt;=y))
-        and ((mouse_x&gt;=y) and (mouse_x&lt;=x+Width))) {
+        and ((mouse_x&gt;=x) and (mouse_x&lt;=x+Width))) {
         blindsMode = !blindsMode;
         ui_bring_to_front(UIController,windowID);
     };
@@ -81,6 +81,13 @@ y = mouse_y-mouseYOffset;
             <string>if !blindsMode {
 // Main Window / Window Color
 draw_rectangle_colour(x,y,x+Width,y+Height,UIController.windowColor1,UIController.windowColor1,UIController.windowColor2,UIController.windowColor2,0);
+
+// Window Buttons
+if closeButton and windowBlinds {
+draw_rectangle_colour(x+Width-((tHeight+1)*2),y,x+Width,y+tHeight,UIController.windowColor2,UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,0);
+} else if closeButton or windowBlinds {
+draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight,UIController.windowColor2,UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,0);
+};
 
 // Borders
 draw_set_colour(UIController.borderColor);
