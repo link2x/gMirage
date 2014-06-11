@@ -33,15 +33,21 @@ if mouseInBounds { // If the mouse was detected by UIWindow to be within the usa
     if (mouse_check_button_pressed(mb_left) and !UIController.mouseHeld) {
         UIController.mouseHeld = 1;
         ui_bring_to_front(UIController,windowID);
-        if (mouse_y&lt;=(y+tHeight+1)) {Dragging = 1; mouseXOffset = mouse_x-x; mouseYOffset = mouse_y-y;};
+        if closeButton and windowBlinds {
+            if (mouse_y&lt;=(y+tHeight+1-((tHeight+1)*2))) {Dragging = 1; mouseXOffset = mouse_x-x; mouseYOffset = mouse_y-y;};
+        } else if closeButton or windowBlinds {
+            if (mouse_y&lt;=(y+tHeight+1-(tHeight+1))) {Dragging = 1; mouseXOffset = mouse_x-x; mouseYOffset = mouse_y-y;};
+        } else {
+            if (mouse_y&lt;=(y+tHeight+1)) {Dragging = 1; mouseXOffset = mouse_x-x; mouseYOffset = mouse_y-y;};
+        };
     } else if ((!mouse_check_button(mb_left)) and (UIController.mouseHeld)) {
         UIController.mouseHeld = 0;
         if Dragging {Dragging = 0;};
-    }
+    };
     
     // Window Blinds - RightClick check.
     if ((mouse_check_button_released(mb_right)) and ((mouse_y&lt;=(y+tHeight+1)) and (mouse_y&gt;=y))
-        and ((mouse_x&gt;=x) and (mouse_x&lt;=x+Width))) {
+        and ((mouse_x&gt;=x) and (mouse_x&lt;=x+Width-((tHeight+1)*2)))) {
         blindsMode = !blindsMode;
         ui_bring_to_front(UIController,windowID);
     };
@@ -78,21 +84,34 @@ y = mouse_y-mouseYOffset;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if !blindsMode {
+            <string>if !blindsMode { // Window Mode
 // Main Window / Window Color
 draw_rectangle_colour(x,y,x+Width,y+Height,UIController.windowColor1,UIController.windowColor1,UIController.windowColor2,UIController.windowColor2,0);
 
 // Window Buttons
+// Main Buttons
 if closeButton and windowBlinds {
-draw_rectangle_colour(x+Width-((tHeight+1)*2),y,x+Width,y+tHeight,UIController.windowColor2,UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,0);
+    draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor2,UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,0);
+    draw_rectangle_colour(x+Width-((tHeight+1)*2),y,x+Width-(tHeight+1),y+tHeight+(Padding+1),UIController.windowColor2,UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,0);
 } else if closeButton or windowBlinds {
-draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight,UIController.windowColor2,UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,0);
+    draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor2,UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,0);
+};
+
+// Over Animation
+if closeButton and windowBlinds {
+    if overClose draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
+    if overBlinds draw_rectangle_colour(x+Width-((tHeight+1)*2),y,x+Width-(tHeight+1),y+tHeight+(Padding+1),UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
+} else if closeButton or windowBlinds {
+    if (overClose or overBlinds) draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
 };
 
 // Borders
 draw_set_colour(UIController.borderColor);
+// Button Border
+if (closeButton or windowBlinds) draw_rectangle(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),1);
+if (closeButton and windowBlinds) draw_rectangle(x+Width-((tHeight+1)*2),y,x+Width-(tHeight+1),y+tHeight+(Padding+1),1);
 // Outer Border
-draw_rectangle(x,y,x+Width,y+Height,1); 
+draw_rectangle(x,y,x+Width,y+Height,1);
 // Inner Border
 draw_rectangle(x+(Padding+1),y+(tHeight)+(Padding+1),x+Width-(Padding+1),y+Height-(Padding+1),1);
 
@@ -117,13 +136,33 @@ draw_rectangle(x+(Padding+2),y+(tHeight)+(Padding+2),x+Width-(Padding+2),y+Heigh
 // Inner Surface
 draw_surface_part(Surface,0,0,Width-((2*Padding)+(3)), Height-((2*Padding)+(3)+(tHeight)),x+(Padding+2),y+(tHeight)+(Padding+2));
 
-}; else {
+} else { // Blinds Mode
 
 // Main Window / Window Color
 draw_rectangle_colour(x,y,x+Width,y+(tHeight)+(Padding+1),UIController.windowColor1,UIController.windowColor1,UIController.windowColor2,UIController.windowColor2,0);
 
+// Window Buttons
+// Main Buttons
+if closeButton and windowBlinds {
+    draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor2,UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,0);
+    draw_rectangle_colour(x+Width-((tHeight+1)*2),y,x+Width-(tHeight+1),y+tHeight+(Padding+1),UIController.windowColor2,UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,0);
+} else if closeButton or windowBlinds {
+    draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor2,UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,0);
+};
+
+// Over Animation
+if closeButton and windowBlinds {
+    if overClose draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
+    if overBlinds draw_rectangle_colour(x+Width-((tHeight+1)*2),y,x+Width-(tHeight+1),y+tHeight+(Padding+1),UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
+} else if closeButton or windowBlinds {
+    if (overClose or overBlinds) draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
+};
+
 // Borders
 draw_set_colour(UIController.borderColor);
+// Button Border
+if (closeButton or windowBlinds) draw_rectangle(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),1);
+if (closeButton and windowBlinds) draw_rectangle(x+Width-((tHeight+1)*2),y,x+Width-(tHeight+1),y+tHeight+(Padding+1),1);
 // Outer Border
 draw_rectangle(x,y,x+Width,y+(tHeight)+(Padding+1),1);
 

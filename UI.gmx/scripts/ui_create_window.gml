@@ -39,6 +39,8 @@ nWindow.closeButton   =  1; // Enables/Disables the Close button.
 nWindow.scrollBar     =  1; // Enables/Disables the Scroll Bar. (This is automatically disabled by having your iHeight equal to your Height. This leaves unused pixels, but you can force this on by setting the variable again later.
 nWindow.mouseInBounds =  0; // Used for mouse detection with Z levels.
 nWindow.blindsMode    =  0; // Used for switching between blinds and normal mode.
+nWindow.overClose     =  0; // Used for the close button.
+nWindow.overBlinds    =  0; // Used for the blinds button.
 
 // System checks.
 if nWindow.iHeight < nWindow.Height {nWindow.iHeight = nWindow.Height}; // There's no reason to have an inner window be smaller than the space it has. This automatically corrects that.
