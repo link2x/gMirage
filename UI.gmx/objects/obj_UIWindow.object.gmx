@@ -39,7 +39,9 @@ if mouseInBounds { // If the mouse was detected by UIWindow to be within the usa
         if Dragging {Dragging = 0;};
     }
     
-    if ((mouse_check_button_released(mb_right)) and (mouse_y&lt;=(y+tHeight+1))) {
+    // Window Blinds - RightClick check.
+    if ((mouse_check_button_released(mb_right)) and ((mouse_y&lt;=(y+tHeight+1)) and (mouse_y&gt;=y))
+        and ((mouse_x&gt;=y) and (mouse_x&lt;=x+Width))) {
         blindsMode = !blindsMode;
         ui_bring_to_front(UIController,windowID);
     };
