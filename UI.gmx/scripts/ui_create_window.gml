@@ -5,8 +5,13 @@
 // Additionally, registers the window with a given UIController, for Z-handling and easy control.
 //
 // Usage:
-// window = ui_create_window( X, Y, Width, Height, Boarder, Padding, iPadding, bWidth, tHeight, iHeight, UIController);
+// window = ui_create_window( X, Y, Width, Height, [iHeight], [UIController]);
 //
+// Notes:
+// If you want to specify UIController, but don't want to specify iHeight, just
+// use a 0 or negative number.
+//     EX: ui_create_window(32,32,240,480,0,objUI);
+// The system will handle the rest.
 
 // Create the new window object. Position is unimportant.
 nWindow         = instance_create(0,0,obj_UIWindow);
@@ -15,17 +20,17 @@ nWindow         = instance_create(0,0,obj_UIWindow);
 nWindow.visible = false;
 
 // Now we set all of the draw/control information.
-nWindow.x            =  argument0; // Window X Position
-nWindow.y            =  argument1; // Window Y Position
-nWindow.Width        =  argument2; // Window Width
-nWindow.Height       =  argument3; // Window Height (Viewport)
-nWindow.Border       =  argument4; // Window Border *BROKEN - SET TO 1*
-nWindow.Padding      =  argument5; // Window Padding (Between Borders)
-nWindow.iPadding     =  argument6; // Window Padding (Between Inner Boarder and Content) *UNUSED - SET TO 2*
-nWindow.bWidth       =  argument7; // Button Width *UNUSED - Might as well just set it to tHeight*
-nWindow.tHeight      =  argument8; // Title Height
-nWindow.iHeight      =  argument9; // Window Height (Inner/Unseen - Scroll Bar)
-nWindow.UIController = argument10; // Controller Object ID
+nWindow.x            = argument[0]; // Window X Position
+nWindow.y            = argument[1]; // Window Y Position
+nWindow.Width        = argument[2]; // Window Width
+nWindow.Height       = argument[3]; // Window Height (Viewport)
+if (argument_count >= 5) {nWindow.iHeight = argument[4];} else {nWindow.iHeight = nWindow.Height;};
+if (argument_count >= 6) {nWindow.UIController = argument[5];} else {nWindow.UIController = id;};
+
+// Some theming variables - Because of how these are referenced, it's easier to pass them along here instead of having the window reference them itsself.
+nWindow.Padding = nWindow.UIController.Padding;
+nWindow.tHeight = nWindow.UIController.tHeight;
+nWindow.Border  = nWindow.UIController.Border;
 
 // Some control variables.
 nWindow.Dragging     =          0; // Used for mouse handling during dragging.

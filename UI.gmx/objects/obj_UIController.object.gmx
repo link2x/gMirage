@@ -33,7 +33,7 @@ windowZ[0]  = 0;
 windowZ[1]  = 1;
 windowCount = 0;
 
-// THEMING - These are accessed by windows to theme them.
+// THEMING - Color - These are accessed by windows to theme them.
 borderColor      = c_black;  // Window Border Color
 borderColorSel   = c_gray; // Window Border Color (When mouse is in bounds)
 windowColor1     = c_navy; // Upper Fade Color
@@ -42,18 +42,23 @@ windowColorInner = c_white;  // Inner Window Color
 titleColor       = c_white;  // Title Color
 titleColorShade  = c_dkgray; // Title Color Shadow
 
+// THEMING - Size
+Padding  =  2;  // Window Padding (Between Borders) - Also used for window buttons and title.
+tHeight  =  16; // Title Height (The space between the top outer and inner borders, not including padding) - Also used for window button widths.
+Border   =  1;  // Window Border *Broken due to oversight. Set to 1.*
+
 // MOUSE THEMING - This creates obj_UIMouse. Use it to style the mouse if you'd like. Otherwise leave it empty, but keep the object.
 mouseHeld = 0;
 instance_create(0,0,obj_UIMouse);
 
 // DEBUG Window
-debugWindow = ui_create_window(2,32,512,320,1,2,2,8,16,320,id);
+debugWindow = ui_create_window(2,32,512,320,320,id);
 window[debugWindow].Title   = "UIDebug";
 window[debugWindow].visible = true;
 window[debugWindow].closeButton = false; // Disable the close button for this window.
 
 // A test window.
-testWindow = ui_create_window(2,2,320,240,1,2,2,8,16,240,id); // Test window 1
+testWindow = ui_create_window(2,2,320,240,240,id); // Test window 1
 window[testWindow].Title   = "Test Window 1";
 window[testWindow].visible = true; // For testing purposes, we're going to make it instantly visible.
 window[testWindow].closeButton  = false; // Disable all window buttons for this window.
@@ -61,13 +66,13 @@ window[testWindow].windowBlinds = false;
 
 
 // A test window.
-testWindow2 = ui_create_window(32,32,320,240,1,2,2,8,16,240,id); // Test window 2
+testWindow2 = ui_create_window(32,32,320,240,240,id); // Test window 2
 window[testWindow2].Title   = "Test Window 2";
 window[testWindow2].visible = true; // For testing purposes, we're going to make it instantly visible.
 window[testWindow2].windowBlinds = false; // Disable window blinds for this window.
 
 // A test window.
-testWindow3 = ui_create_window(64,64,320,240,1,2,2,8,16,240,id); // Test window 2
+testWindow3 = ui_create_window(64,64,320,240,240,id); // Test window 2
 window[testWindow3].Title   = "Test Window 3";
 window[testWindow3].visible = true; // For testing purposes, we're going to make it instantly visible.
 
