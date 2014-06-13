@@ -33,12 +33,14 @@ if mouseInBounds { // If the mouse was detected by UIWindow to be within the usa
     if (mouse_check_button_pressed(mb_left) and !UIController.mouseHeld) {
         UIController.mouseHeld = 1;
         ui_bring_to_front(UIController,windowID);
-        if closeButton and windowBlinds {
-            if (mouse_y&lt;=(y+tHeight+1-((tHeight+1)*2))) {Dragging = 1; mouseXOffset = mouse_x-x; mouseYOffset = mouse_y-y;};
-        } else if closeButton or windowBlinds {
-            if (mouse_y&lt;=(y+tHeight+1-(tHeight+1))) {Dragging = 1; mouseXOffset = mouse_x-x; mouseYOffset = mouse_y-y;};
-        } else {
-            if (mouse_y&lt;=(y+tHeight+1)) {Dragging = 1; mouseXOffset = mouse_x-x; mouseYOffset = mouse_y-y;};
+        if (mouse_y&lt;=(y+tHeight+1)) {
+            if closeButton and windowBlinds {
+                if (mouse_x&lt;=(x+Width-((tHeight+1)*2))) {Dragging = 1; mouseXOffset = mouse_x-x; mouseYOffset = mouse_y-y;};
+            } else if closeButton or windowBlinds {
+                if (mouse_x&lt;=(x+Width-(tHeight+1))) {Dragging = 1; mouseXOffset = mouse_x-x; mouseYOffset = mouse_y-y;};
+            } else {
+                if (mouse_x&lt;=(x+Width)) {Dragging = 1; mouseXOffset = mouse_x-x; mouseYOffset = mouse_y-y;};
+            };
         };
     } else if ((!mouse_check_button(mb_left)) and (UIController.mouseHeld)) {
         UIController.mouseHeld = 0;
@@ -48,11 +50,42 @@ if mouseInBounds { // If the mouse was detected by UIWindow to be within the usa
     // Window Blinds - RightClick check.
     if ((mouse_check_button_released(mb_right)) and ((mouse_y&lt;=(y+tHeight+1)) and (mouse_y&gt;=y))
         and ((mouse_x&gt;=x) and (mouse_x&lt;=x+Width-((tHeight+1)*2)))) {
-        blindsMode = !blindsMode;
-        ui_bring_to_front(UIController,windowID);
+            if windowBlinds {blindsMode = !blindsMode;};
+            ui_bring_to_front(UIController,windowID);
     };
     
-}
+    // Buttons - Check mouse position.
+    if closeButton and windowBlinds {
+        if (mouse_y&lt;=(y+tHeight+1)) and ((mouse_x&lt;x+Width) and (mouse_x&gt;(x+Width-(tHeight+1)))) {
+            overClose = 1;
+        } else {
+            overClose = 0;
+        };
+        if (mouse_y&lt;=(y+tHeight+1)) and ((mouse_x&lt;(x+Width-(tHeight+1))) and (mouse_x&gt;(x+Width-((tHeight+1)*2)))) {
+            overBlinds = 1;
+        } else {
+            overBlinds = 0;
+        };
+    } else if closeButton or windowBlinds {
+        if (mouse_y&lt;=(y+tHeight+1)) and ((mouse_x&lt;x+Width) and (mouse_x&gt;(x+Width-(tHeight+1)))) {
+            overClose  = closeButton;
+            overBlinds = windowBlinds;
+        } else {
+            overClose  = 0;
+            overBlinds = 0;
+        };
+    };
+    
+    // Buttons - Actual click code.
+    if (mouse_check_button_released(mb_left)) {
+        if overClose {visible = 0;};
+        if overBlinds {blindsMode = !blindsMode;};
+    };
+    
+} else { // Checks for when the mouse is out of bounds.
+overClose  = 0; // BUG FIX
+overBlinds = 0; // These can sometimes if the mouse is moved over them too fast.
+};
 
 if !UIController.mouseHeld {
 Dragging = 0;
@@ -62,6 +95,10 @@ if Dragging {
 x = mouse_x-mouseXOffset;
 y = mouse_y-mouseYOffset;
 };
+
+// Bug fix. Draws won't look very nice if we allow strange x/y values.
+x = round(x);
+y = round(y);
 </string>
           </argument>
         </arguments>
@@ -102,7 +139,36 @@ if closeButton and windowBlinds {
     if overClose draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
     if overBlinds draw_rectangle_colour(x+Width-((tHeight+1)*2),y,x+Width-(tHeight+1),y+tHeight+(Padding+1),UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
 } else if closeButton or windowBlinds {
-    if (overClose or overBlinds) draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
+    if (overClose or overBlinds) draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
+};
+
+// Button Graphics
+if closeButton and windowBlinds {
+    // Shadows
+    draw_set_color(UIController.titleColorShade);
+    draw_line(x+Width+Padding-((tHeight+1)*2),y+Padding+1,x+Width-((tHeight+1)+Padding),y+Padding+1); // Overbar/WindowBlind icon.
+    draw_line(x+Width-(tHeight+1)+Padding,y+tHeight-(Padding+1),x+Width-Padding,y+Padding+1); // X/Close icon. - 1
+    draw_line(x+Width-(tHeight+1)+Padding,y+Padding+1,x+Width-Padding,y+tHeight-(Padding+1)); // X/Close icon. - 2    
+    // Highlights
+    draw_set_color(UIController.titleColor);
+    draw_line(x+Width+Padding-((tHeight+1)*2),y+Padding,x+Width-((tHeight+1)+Padding),y+Padding); // Overbar/WindowBlind icon.
+    draw_line(x+Width-(tHeight+1)+Padding,y+tHeight-(Padding),x+Width-Padding,y+Padding); // X/Close icon. - 1
+    draw_line(x+Width-(tHeight+1)+Padding,y+Padding,x+Width-Padding,y+tHeight-(Padding)); // X/Close icon. - 2
+
+} else {
+    if closeButton {
+        draw_set_color(UIController.titleColorShade);
+        draw_line(x+Width-(tHeight+1)+Padding,y+tHeight-(Padding+1),x+Width-Padding,y+Padding+1); // X/Close icon. - 1
+        draw_line(x+Width-(tHeight+1)+Padding,y+Padding+1,x+Width-Padding,y+tHeight-(Padding+1)); // X/Close icon. - 2 
+        draw_set_color(UIController.titleColor);
+        draw_line(x+Width-(tHeight+1)+Padding,y+tHeight-(Padding),x+Width-Padding,y+Padding); // X/Close icon. - 1
+        draw_line(x+Width-(tHeight+1)+Padding,y+Padding,x+Width-Padding,y+tHeight-(Padding)); // X/Close icon. - 2
+    } else if windowBlinds {
+        draw_set_color(UIController.titleColorShade);
+        draw_line(x+Width-(tHeight+1)+Padding,y+Padding+1,x+Width-Padding,y+Padding+1); // Overbar/WindowBlind icon.
+        draw_set_color(UIController.titleColor);
+        draw_line(x+Width-(tHeight+1)+Padding,y+Padding,x+Width-Padding,y+Padding); // Overbar/WindowBlind icon.
+    };
 };
 
 // Borders
@@ -155,8 +221,38 @@ if closeButton and windowBlinds {
     if overClose draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
     if overBlinds draw_rectangle_colour(x+Width-((tHeight+1)*2),y,x+Width-(tHeight+1),y+tHeight+(Padding+1),UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
 } else if closeButton or windowBlinds {
-    if (overClose or overBlinds) draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor2,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
+    if (overClose or overBlinds) draw_rectangle_colour(x+Width-(tHeight+1),y,x+Width,y+tHeight+(Padding+1),UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,UIController.windowColor1,0);
 };
+
+// Button Graphics
+if closeButton and windowBlinds {
+    // Shadows
+    draw_set_color(UIController.titleColorShade);
+    draw_line(x+Width+Padding-((tHeight+1)*2),y+Padding+1,x+Width-((tHeight+1)+Padding),y+Padding+1); // Overbar/WindowBlind icon.
+    draw_line(x+Width-(tHeight+1)+Padding,y+tHeight-(Padding+1),x+Width-Padding,y+Padding+1); // X/Close icon. - 1
+    draw_line(x+Width-(tHeight+1)+Padding,y+Padding+1,x+Width-Padding,y+tHeight-(Padding+1)); // X/Close icon. - 2    
+    // Highlights
+    draw_set_color(UIController.titleColor);
+    draw_line(x+Width+Padding-((tHeight+1)*2),y+Padding,x+Width-((tHeight+1)+Padding),y+Padding); // Overbar/WindowBlind icon.
+    draw_line(x+Width-(tHeight+1)+Padding,y+tHeight-(Padding),x+Width-Padding,y+Padding); // X/Close icon. - 1
+    draw_line(x+Width-(tHeight+1)+Padding,y+Padding,x+Width-Padding,y+tHeight-(Padding)); // X/Close icon. - 2
+
+} else {
+    if closeButton {
+        draw_set_color(UIController.titleColorShade);
+        draw_line(x+Width-(tHeight+1)+Padding,y+tHeight-(Padding+1),x+Width-Padding,y+Padding+1); // X/Close icon. - 1
+        draw_line(x+Width-(tHeight+1)+Padding,y+Padding+1,x+Width-Padding,y+tHeight-(Padding+1)); // X/Close icon. - 2 
+        draw_set_color(UIController.titleColor);
+        draw_line(x+Width-(tHeight+1)+Padding,y+tHeight-(Padding),x+Width-Padding,y+Padding); // X/Close icon. - 1
+        draw_line(x+Width-(tHeight+1)+Padding,y+Padding,x+Width-Padding,y+tHeight-(Padding)); // X/Close icon. - 2
+    } else if windowBlinds {
+        draw_set_color(UIController.titleColorShade);
+        draw_line(x+Width-(tHeight+1)+Padding,y+Padding+1,x+Width-Padding,y+Padding+1); // Overbar/WindowBlind icon.
+        draw_set_color(UIController.titleColor);
+        draw_line(x+Width-(tHeight+1)+Padding,y+Padding,x+Width-Padding,y+Padding); // Overbar/WindowBlind icon.
+    };
+};
+
 
 // Borders
 draw_set_colour(UIController.borderColor);

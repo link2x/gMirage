@@ -50,17 +50,21 @@ instance_create(0,0,obj_UIMouse);
 debugWindow = ui_create_window(2,32,512,320,1,2,2,8,16,320,id);
 window[debugWindow].Title   = "UIDebug";
 window[debugWindow].visible = true;
+window[debugWindow].closeButton = false; // Disable the close button for this window.
 
 // A test window.
 testWindow = ui_create_window(2,2,320,240,1,2,2,8,16,240,id); // Test window 1
 window[testWindow].Title   = "Test Window 1";
 window[testWindow].visible = true; // For testing purposes, we're going to make it instantly visible.
+window[testWindow].closeButton  = false; // Disable all window buttons for this window.
+window[testWindow].windowBlinds = false;
 
 
 // A test window.
 testWindow2 = ui_create_window(32,32,320,240,1,2,2,8,16,240,id); // Test window 2
 window[testWindow2].Title   = "Test Window 2";
 window[testWindow2].visible = true; // For testing purposes, we're going to make it instantly visible.
+window[testWindow2].windowBlinds = false; // Disable window blinds for this window.
 
 // A test window.
 testWindow3 = ui_create_window(64,64,320,240,1,2,2,8,16,240,id); // Test window 2
