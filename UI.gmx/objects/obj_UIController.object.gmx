@@ -34,13 +34,13 @@ windowZ[1]  = 1;
 windowCount = 0;
 
 // THEMING - Color - These are accessed by windows to theme them.
-borderColor      = c_black;  // Window Border Color
-borderColorSel   = c_gray; // Window Border Color (When mouse is in bounds)
-windowColor1     = c_navy; // Upper Fade Color
-windowColor2     = c_ltgray;  // Lower Fade Color
-windowColorInner = c_white;  // Inner Window Color
-titleColor       = c_white;  // Title Color
-titleColorShade  = c_dkgray; // Title Color Shadow
+borderColor      = make_color_rgb(42,46,47);  // Window Border Color
+borderColorSel   = make_color_rgb(47,73,75); // Window Border Color (When mouse is in bounds)
+windowColor1     = make_color_rgb(8,121,132); // Upper Fade Color
+windowColor2     = make_color_rgb(47,73,75);  // Lower Fade Color
+windowColorInner = make_color_rgb(35,98,103);  // Inner Window Color
+titleColor       = make_color_rgb(1,221,239);  // Title Color
+titleColorShade  = make_color_rgb(42,46,47); // Title Color Shadow
 
 // THEMING - Size
 Padding  =  2;  // Window Padding (Between Borders) - Also used for window buttons and title.
@@ -52,13 +52,13 @@ mouseHeld = 0;
 instance_create(0,0,obj_UIMouse);
 
 // DEBUG Window
-debugWindow = ui_create_window(2,32,512,320,320,id);
+debugWindow = ui_create_window(2,32,512,320);
 window[debugWindow].Title   = "UIDebug";
 window[debugWindow].visible = true;
 window[debugWindow].closeButton = false; // Disable the close button for this window.
 
 // A test window.
-testWindow = ui_create_window(2,2,320,240,240,id); // Test window 1
+testWindow = ui_create_window(2,2,320,240); // Test window 1
 window[testWindow].Title   = "Test Window 1";
 window[testWindow].visible = true; // For testing purposes, we're going to make it instantly visible.
 window[testWindow].closeButton  = false; // Disable all window buttons for this window.
@@ -66,22 +66,15 @@ window[testWindow].windowBlinds = false;
 
 
 // A test window.
-testWindow2 = ui_create_window(32,32,320,240,240,id); // Test window 2
+testWindow2 = ui_create_window(32,32,320,240); // Test window 2
 window[testWindow2].Title   = "Test Window 2";
 window[testWindow2].visible = true; // For testing purposes, we're going to make it instantly visible.
 window[testWindow2].windowBlinds = false; // Disable window blinds for this window.
 
 // A test window.
-testWindow3 = ui_create_window(64,64,320,240,240,id); // Test window 2
+testWindow3 = ui_create_window(64,64,320,240); // Test window 2
 window[testWindow3].Title   = "Test Window 3";
 window[testWindow3].visible = true; // For testing purposes, we're going to make it instantly visible.
-
-// DEBUG
-if windowCount &gt; 0 {
-    for (i=windowCount;i&gt;0;i-=1) {
-        show_message("Title: "+string(window[i].Title)+" // W-ID ("+string(i)+") // O-ID ("+string(window[i])+") // Vis: "+string(window[i].visible)+" // Z: "+string(window[i].z));
-    };
-};
 </string>
           </argument>
         </arguments>
@@ -209,7 +202,16 @@ for(dWindow=windowCount;dWindow&gt;0;dWindow-=1) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// DEBUG - Now draws to the debug window.
+            <string>if windowCount &gt; 0 {
+    for (i=windowCount;i&gt;0;i-=1) {
+        surface_set_target(window[i].Surface);
+        draw_set_color(windowColorInner);
+        draw_rectangle(-1,-1, window[i].Width-(2*((2*window[i].Border)+window[i].Padding)),window[i].iHeight,0);
+        surface_reset_target();
+    };
+};
+
+// DEBUG - Now draws to the debug window.
 surface_set_target(window[debugWindow].Surface);
 draw_rectangle(-1,-1, window[debugWindow].Width-(2*((2*window[debugWindow].Border)+window[debugWindow].Padding)),window[debugWindow].iHeight,0);
 

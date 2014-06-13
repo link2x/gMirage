@@ -69,9 +69,6 @@ nWindow.UIController.window[nWindow.UIController.windowCount] = nWindow; // Sets
 nWindow.windowID = nWindow.UIController.windowCount;
 nWindow.z        = nWindow.UIController.windowCount;
 
-// DEBUG
-show_message(nWindow.z);
-
 // Bring the new window to the front.
 ui_bring_to_front(nWindow.UIController,nWindow.windowID);
 
